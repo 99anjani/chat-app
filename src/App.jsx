@@ -9,7 +9,8 @@ import ChatList from './components/ChatList';
 const App = () => {
   return (
     <div>
-      <Register/>
+      {/* <Register/> */}
+      <Login/>
     </div>
   )
 }
