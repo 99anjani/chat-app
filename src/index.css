@@ -18,6 +18,14 @@ body {
     opacity: 0.9;
 }
 
+.chat-background-image {
+    background-image: url("assets/chat-background-1.jpg");
+    background-position: center;
+    background-size: 100%;
+    height: 100vh;
+    opacity: 0.9;
+}
+
 .custom-scrollbar {
     overflow: scroll;
 }

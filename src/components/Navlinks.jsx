@@ -5,11 +5,11 @@ import { RiArrowDownSFill, RiBardLine, RiChatAiFill, RiChatAiLine, RiFile4Line, 
 
 const Navlinks = () => {
   return (
-    <section className='sticky lg:static top-0 flex items-center lg:items-start lg:justify-start h-[7vh] lg:h-[100vh] w-[100%] lg:w-[150px] py-8 lg:py-0 bg-[#0a0838]'>
+    <section className='sticky lg:static top-0 flex items-center lg:items-start lg:justify-start h-[7vh] lg:h-[100vh] w-[100%] lg:w-[100px] py-8 lg:py-0 bg-[#0a0838]'>
       <main className='flex lg:flex-col items-center lg:gap-10 justify-between lg:px-0 w-[100%]'>
         <div className='flex items-start justify-center lg:border-b border-gray-500 border-b-2 w-[100%] p-4 '>
           <span>
-            <img src={logo} className='w-[66px] h-[72px] object-contain ' alt='' />
+            <img src={logo} className='w-[66px] h-[72px] object-contain' alt='' />
           </span>
         </div>
 

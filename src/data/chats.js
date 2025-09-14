@@ -11,8 +11,8 @@ const chatData = [
                     seconds: 1758365439,
                     nanoseconds: 217000000,
                 },
-                email: "baxo@mailinator.com",
-                username: "baxo",
+                email: "john@gmail.com",
+                username: "john",
             },
             {
                 email: "tixaduxeg@mailinator.com",
@@ -42,11 +42,11 @@ const chatData = [
                     seconds: 1758365439,
                     nanoseconds: 217000000,
                 },
-                email: "baxo@mailinator.com",
+                email: "john@gmail.com",
                 fullName: "Emily Jackson",
                 status: "online",
                 image: "https://i.pravatar.cc/150?img=1",
-                username: "baxo",
+                username: "john",
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
             },
             {
@@ -77,10 +77,10 @@ const chatData = [
         users: [
             {
                 status: "online",
-                email: "baxo@mailinator.com",
+                email: "john@gmail.com",
                 image: "https://i.pravatar.cc/150?img=1",
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
-                username: "baxo",
+                username: "john",
                 lastSeen: {
                     seconds: 1758365439,
                     nanoseconds: 217000000,
@@ -105,10 +105,10 @@ const chatData = [
         id: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2-GxVkO3aFOocvEhy9MFIPaY6e4hp2",
         users: [
             {
-                email: "baxo@mailinator.com",
+                email: "john@gmail.com",
                 image: "https://i.pravatar.cc/150?img=1",
                 status: "online",
-                username: "baxo",
+                username: "john",
                 fullName: "Emily Jackson",
                 lastSeen: {
                     seconds: 1758365439,
@@ -146,14 +146,14 @@ const chatData = [
             {
                 fullName: "Emily Jackson",
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
-                username: "baxo",
+                username: "john",
                 image: "https://i.pravatar.cc/150?img=1",
                 status: "online",
                 lastSeen: {
                     seconds: 1758365439,
                     nanoseconds: 217000000,
                 },
-                email: "baxo@mailinator.com",
+                email: "john@gmail.com",
             },
             {
                 fullName: "Gavin Kerr",
@@ -179,11 +179,11 @@ const chatData = [
                     nanoseconds: 217000000,
                 },
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
-                email: "baxo@mailinator.com",
+                email: "john@gmail.com",
                 status: "online",
                 image: "https://i.pravatar.cc/150?img=1",
                 fullName: "Emily Jackson",
-                username: "baxo",
+                username: "john",
             },
             {
                 username: "sixewybi",
@@ -213,9 +213,9 @@ const chatData = [
                     nanoseconds: 587000000,
                 },
                 fullName: "Emily Jackson",
-                username: "baxo",
+                username: "john",
                 status: "online",
-                email: "baxo@mailinator.com",
+                email: "john@gmail.com",
                 image: "https://i.pravatar.cc/150?img=1",
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
             },
@@ -246,12 +246,12 @@ const chatData = [
                 image: "https://i.pravatar.cc/150?img=1",
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
                 status: "online",
-                email: "baxo@mailinator.com",
+                email: "john@gmail.com",
                 lastSeen: {
                     seconds: 1758412252,
                     nanoseconds: 587000000,
                 },
-                username: "baxo",
+                username: "john",
             },
             {
                 lastSeen: {

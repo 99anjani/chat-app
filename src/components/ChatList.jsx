@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import defaultProfile from '../../public/assets/default.jpg'
+import defaultProfile from '../../public/assets/user_1.png'
 import { RiMore2Fill } from 'react-icons/ri'
 import SearchModel from './SearchModel'
 import chatData from '../data/chats'
@@ -22,13 +22,13 @@ const ChatList = () => {
   },[chats])
 
   return (
-    <section className='relative hidden lg:flex flex-col items-start justify-start bg-white h-[100vh] md:w-[600px]'>
+    <section className='relative hidden lg:flex flex-col items-start justify-start bg-white h-[100vh] md:w-[450px]'>
       <header className='flex items-center justify-between w-[100%] lg:border-b border-gray-500 border-b-2 p-6 sticky md:static top-0 z-[100]'>
         <main className='flex items-center gap-3'>
           <img src={defaultProfile} className='w-[54px] h-[54px] object-cover rounded-full' alt='' />
           <span>
-            <h3 className='p-0 font-semibold text-[#080659] md:text-[17px]'>{'Chatfric User'}</h3>
-            <p className='p-0 font-light text-[#080659] md:text-[15px]'>@chatfric</p>
+            <h3 className='p-0 font-semibold text-[#080659] md:text-[17px]'>{'John Doe'}</h3>
+            <p className='p-0 font-light text-[#080659] md:text-[15px]'>@john</p>
           </span>
         </main>
         <button className='bg-[#C3CFF9] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg'>
@@ -47,7 +47,7 @@ const ChatList = () => {
         {sortedChats?.map((chat) => (
             <button key={chat?.uid} className="flex items-start justify-between w-[100%] border-b border-[#9090902c] px-5 pb-3 pt-3">
               {
-                chat?.users?.filter((user) => user.email !== "baxo@mailinator.com")
+              chat?.users?.filter((user) => user.email !== "john@gmail.com")
                   ?.map((user) =>(
                     <>
                       <div className='flex items-start gap-3'>
