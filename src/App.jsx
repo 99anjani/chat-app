@@ -5,7 +5,7 @@ import Navlinks from './components/Navlinks';
 import chatBox from './components/ChatBox';
 import ChatList from './components/ChatList';
 import ChatBox from './components/ChatBox';
-
+import {auth} from "./firebase/firebase"
 
 const App = () => {
   return (
