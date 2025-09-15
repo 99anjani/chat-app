@@ -8,7 +8,7 @@ const chatData = [
                 fullName: "Emily Jackson",
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
                 lastSeen: {
-                    seconds: 1758365439,
+                    seconds: 1757565439,
                     nanoseconds: 217000000,
                 },
                 email: "john@gmail.com",
@@ -18,7 +18,7 @@ const chatData = [
                 email: "tixaduxeg@mailinator.com",
                 fullName: "Harrison Duran",
                 lastSeen: {
-                    seconds: 1758349756,
+                    seconds: 1757549756,
                     nanoseconds: 282000000,
                 },
                 image: "https://i.pravatar.cc/150?img=2",
@@ -28,7 +28,7 @@ const chatData = [
             },
         ],
         lastMessageTimestamp: {
-            seconds: 1758365467,
+            seconds: 1757565467,
             nanoseconds: 676000000,
         },
         lastMessage: "Hey there, what's good brother?",
@@ -39,7 +39,7 @@ const chatData = [
         users: [
             {
                 lastSeen: {
-                    seconds: 1758365439,
+                    seconds: 1757565439,
                     nanoseconds: 217000000,
                 },
                 email: "john@gmail.com",
@@ -57,20 +57,20 @@ const chatData = [
                 username: "suvimydaj",
                 image: "https://i.pravatar.cc/150?img=3",
                 lastSeen: {
-                    seconds: 1758350118,
+                    seconds: 1757550118,
                     nanoseconds: 330000000,
                 },
             },
         ],
         lastMessageTimestamp: {
-            seconds: 1758365880,
+            seconds: 1757565880,
             nanoseconds: 877000000,
         },
     },
     {
         id: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2-Fm8XOlhZzmSpzf2o3pppL8ybyj03",
         lastMessageTimestamp: {
-            seconds: 1758365953,
+            seconds: 1757565953,
             nanoseconds: 696000000,
         },
         lastMessage: "Tarik my guy, what's up gee?!",
@@ -82,7 +82,7 @@ const chatData = [
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
                 username: "john",
                 lastSeen: {
-                    seconds: 1758365439,
+                    seconds: 1757565439,
                     nanoseconds: 217000000,
                 },
                 fullName: "Emily Jackson",
@@ -94,7 +94,7 @@ const chatData = [
                 status: "online",
                 image: "https://i.pravatar.cc/150?img=4",
                 lastSeen: {
-                    seconds: 1758364834,
+                    seconds: 1757564834,
                     nanoseconds: 970000000,
                 },
                 fullName: "Tarik Guy",
@@ -111,7 +111,7 @@ const chatData = [
                 username: "john",
                 fullName: "Emily Jackson",
                 lastSeen: {
-                    seconds: 1758365439,
+                    seconds: 1757565439,
                     nanoseconds: 217000000,
                 },
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
@@ -122,7 +122,7 @@ const chatData = [
                 username: "kuke",
                 uid: "GxVkO3aFOocvEhy9MFIPaY6e4hp2",
                 lastSeen: {
-                    seconds: 1758349764,
+                    seconds: 1757549764,
                     nanoseconds: 80000000,
                 },
                 status: "online",
@@ -130,7 +130,7 @@ const chatData = [
             },
         ],
         lastMessageTimestamp: {
-            seconds: 1758366062,
+            seconds: 1757566062,
             nanoseconds: 24000000,
         },
         lastMessage: "Sup ma'am? How are you?",
@@ -139,7 +139,7 @@ const chatData = [
         id: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2-K9aRITWcalTgW9mlMs3xq2TScFD2",
         lastMessage: "Please message me when you see this message",
         lastMessageTimestamp: {
-            seconds: 1758366099,
+            seconds: 1757566099,
             nanoseconds: 411000000,
         },
         users: [
@@ -150,7 +150,7 @@ const chatData = [
                 image: "https://i.pravatar.cc/150?img=1",
                 status: "online",
                 lastSeen: {
-                    seconds: 1758365439,
+                    seconds: 1757565439,
                     nanoseconds: 217000000,
                 },
                 email: "john@gmail.com",
@@ -161,7 +161,7 @@ const chatData = [
                 uid: "K9aRITWcalTgW9mlMs3xq2TScFD2",
                 username: "zokasy",
                 lastSeen: {
-                    seconds: 1758349900,
+                    seconds: 1757549900,
                     nanoseconds: 870000000,
                 },
                 status: "online",
@@ -175,7 +175,7 @@ const chatData = [
         users: [
             {
                 lastSeen: {
-                    seconds: 1758365439,
+                    seconds: 1757565439,
                     nanoseconds: 217000000,
                 },
                 uid: "6BjHfKIogUdLA1ZEJ5mtdILjZFr2",
@@ -189,7 +189,7 @@ const chatData = [
                 username: "sixewybi",
                 fullName: "Faith Ingram",
                 lastSeen: {
-                    seconds: 1758349775,
+                    seconds: 1757549775,
                     nanoseconds: 649000000,
                 },
                 uid: "XK9T4BCBTiN78aUPH1wTTjmSz3S2",
@@ -199,7 +199,7 @@ const chatData = [
             },
         ],
         lastMessageTimestamp: {
-            seconds: 1758366181,
+            seconds: 1757566181,
             nanoseconds: 736000000,
         },
     },
@@ -209,7 +209,7 @@ const chatData = [
         users: [
             {
                 lastSeen: {
-                    seconds: 1758412252,
+                    seconds: 1757612252,
                     nanoseconds: 587000000,
                 },
                 fullName: "Emily Jackson",
@@ -222,7 +222,7 @@ const chatData = [
             {
                 username: "lyjuzihaf",
                 lastSeen: {
-                    seconds: 1758368276,
+                    seconds: 1757568276,
                     nanoseconds: 577000000,
                 },
                 email: "lyjuzihaf@mailinator.com",
@@ -233,7 +233,7 @@ const chatData = [
             },
         ],
         lastMessageTimestamp: {
-            seconds: 1758414982,
+            seconds: 1757614982,
             nanoseconds: 111000000,
         },
     },
@@ -248,14 +248,14 @@ const chatData = [
                 status: "online",
                 email: "john@gmail.com",
                 lastSeen: {
-                    seconds: 1758412252,
+                    seconds: 1757612252,
                     nanoseconds: 587000000,
                 },
                 username: "john",
             },
             {
                 lastSeen: {
-                    seconds: 1758366768,
+                    seconds: 1757566768,
                     nanoseconds: 896000000,
                 },
                 image: "https://i.pravatar.cc/150?img=11",
@@ -267,7 +267,7 @@ const chatData = [
             },
         ],
         lastMessageTimestamp: {
-            seconds: 1758417042,
+            seconds: 1757617042,
             nanoseconds: 384000000,
         },
     },

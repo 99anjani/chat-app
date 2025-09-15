@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useRef } from 'react'
 import defaultProfile from '../../public/assets/user_1.png'
 import { RiSendPlaneFill } from 'react-icons/ri'
 import {messageData} from '../data/messageData'
@@ -8,10 +8,18 @@ const ChatBox = () => {
   const [messages,setMessages] = useState([]);
   const [messageText , sendMessageText] = useState("");
   const senderEmail = "john@gmail.com";
+  const scrollRef = useRef(null);
 
   useEffect(()=>{
     setMessages(messageData);
   },[])
+
+  useEffect(() => {
+    if(scrollRef.current){
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+    
+  }, [messages])
 
   const sortedMessages = useMemo(()=>{
     return [...messages].sort((a,b) => {
@@ -52,7 +60,7 @@ const ChatBox = () => {
 
       <main className='custom-scrollbar relative h-[100vh] w-[100%] flex flex-col justify-between'>
         <section className='px-3 pt-5 b-20 lg:pb-10'>
-          <div className='overflow-auto h-[80vh]'>
+          <div ref={scrollRef} className='overflow-auto h-[80vh]'>
             {sortedMessages?.map((msg, index) =>(
               <div key={index}>
               {msg?.sender === senderEmail?
