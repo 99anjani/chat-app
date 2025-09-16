@@ -1,6 +1,6 @@
 import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
-import {getFirestore} from "firebase/firestore";
+import {collection, doc, getFirestore, onSnapshot} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA76BAT8ksb2fvWHoCisIqIGm9W_enc-7s",
@@ -14,5 +14,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+export const listenForChats = (setChats) => {
+  const chatRef = collection(db, "chats");
+  const unsubscribe = onSnapshot(chatRef, (snapshot) => {
+    const chatList = snapshot.docs.map((doc) =>({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const filteredChats = chatList.filter((chats) =>  chat?.users?.some((user)=> user.email === auth.currentUser.email));
+    setChats(filteredChats);
+  });
+  return unsubscribe;
+}
 
 export {auth, db} ;

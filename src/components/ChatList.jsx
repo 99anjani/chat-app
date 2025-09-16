@@ -4,12 +4,17 @@ import { RiMore2Fill } from 'react-icons/ri'
 import SearchModel from './SearchModel'
 import chatData from '../data/chats'
 import { formatTimestamp } from '../utils/formatTimeStamp'
+import { listenForChats} from '../firebase/firebase'
 const ChatList = () => {
 
   const [chats,setChats]=useState([]);
 
   useEffect(() => {
-    setChats(chatData);
+    const unsubscribe = listenForChats(setChats);
+
+    return () =>{
+      unsubscribe();
+    }
   }, []);
   
   const sortedChats = useMemo(()=>{
