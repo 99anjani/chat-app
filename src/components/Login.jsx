@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import { TbLogin2 } from "react-icons/tb";
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/firebase';
 
 const Login = ({ isLogin, setIsLogin }) => {
 
@@ -8,15 +10,16 @@ const Login = ({ isLogin, setIsLogin }) => {
     const handleChangeUserData = (e) =>{
       const {name, value} = e.target;
   
-      setUserData((prevState) => (
+      setUserData((prevState) => ( 
         {
           ...prevState,
           [name] : value,
         }
       ) ) 
     }
-    const handleAuth = () =>{
+    const handleAuth = async() =>{
       try{
+        await signInWithEmailAndPassword(auth,  userData?.email, userData.password)
         alert("Login Sucessful")
       }
       catch(error){
