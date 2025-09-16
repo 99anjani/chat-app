@@ -5,7 +5,8 @@ import { auth } from '../firebase/firebase';
 
 const Login = ({ isLogin, setIsLogin }) => {
 
-    const [userData, setUserData]=useState({email: "", password: ""})
+    const [userData, setUserData] = useState({email: "", password: ""});
+    const [isLoading, setIsLoading] = useState(false);
   
     const handleChangeUserData = (e) =>{
       const {name, value} = e.target;
@@ -18,12 +19,16 @@ const Login = ({ isLogin, setIsLogin }) => {
       ) ) 
     }
     const handleAuth = async() =>{
+      setIsLoading(true);
       try{
         await signInWithEmailAndPassword(auth,  userData?.email, userData.password)
         alert("Login Sucessful")
       }
       catch(error){
         console.log(error)
+        alert(error.message)
+      } finally{
+        setIsLoading(false)
       }
     }
 
@@ -39,8 +44,16 @@ const Login = ({ isLogin, setIsLogin }) => {
             <input type='password' name='password' onChange={handleChangeUserData} className='border border-blue-600 w-full p-2 rounded-md bg-[#caf1f8] text-[#0a0246] mb-3 font-medium outline-none placeholder:text-[#4d4566]' placeholder='Password' />
           </div>
           <div className='w-full pl-2 pr-2'>
-            <button  onClick={handleAuth} className='bg-[#22054b] text-[#cfc8ff] font-bold w-full p-2 rounded-md flex items-center gap-2 justify-center'>
-            Login <TbLogin2 />
+            <button disabled={isLoading} onClick={handleAuth} className='bg-[#22054b] text-[#cfc8ff] font-bold w-full p-2 rounded-md flex items-center gap-2 justify-center'>
+            {
+              isLoading ? 
+              <>
+                  Processing...
+              </> :
+              <>
+                  Login <TbLogin2 />
+              </>
+            }
             </button>
           </div>
           <div className='mt-5 text-center text-gray-400'>
