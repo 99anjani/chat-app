@@ -26,16 +26,15 @@ const App = () => {
   return (
     
     <div>
-      {user ? (
+      {user? (
         <div className='flex lg:flex-row flex-col items-start w-[100%]' >
           <Navlinks />
-
           <ChatList />
           <ChatBox />
         </div >
       ):(
           <div>
-            {isLogin ? <Login isLogin={isLogin} setIsLogin={setIsLogin}/> : <Register />}
+            {isLogin ? <Login isLogin={isLogin} setIsLogin={setIsLogin}/> : <Register isLogin={isLogin} setIsLogin={setIsLogin} />}
           </div> 
       )}
     </div>

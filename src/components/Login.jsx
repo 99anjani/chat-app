@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { TbLogin2 } from "react-icons/tb";
 
-const Login = () => {
+const Login = ({ isLogin, setIsLogin }) => {
 
     const [userData, setUserData]=useState({email: "", password: ""})
   
@@ -41,7 +41,7 @@ const Login = () => {
             </button>
           </div>
           <div className='mt-5 text-center text-gray-400'>
-            <button >
+          <button onClick={() => setIsLogin(!isLogin)}>
               Don't have account yet? Sign Up
             </button>
           </div>

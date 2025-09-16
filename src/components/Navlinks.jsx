@@ -1,9 +1,20 @@
 import React from 'react'
 import logo from '../../public/assets/logo.png'
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/firebase';
 import { RiArrowDownSFill, RiBardLine, RiChatAiFill, RiChatAiLine, RiFile4Line, RiFolderUserLine, RiNotificationLine, RiShutDownLine } from "react-icons/ri";
 
 
 const Navlinks = () => {
+
+  const handleLogout = async () => {
+    try {
+      await signOut (auth)
+      alert("Logout Successfull")
+    } catch (error){
+      cons(error)
+    }
+  }
   return (
     <section className='sticky lg:static top-0 flex items-center lg:items-start lg:justify-start h-[7vh] lg:h-[100vh] w-[100%] lg:w-[100px] py-8 lg:py-0 bg-[#0a0838]'>
       <main className='flex lg:flex-col items-center lg:gap-10 justify-between lg:px-0 w-[100%]'>
@@ -40,7 +51,7 @@ const Navlinks = () => {
             </button>
           </li>
           <li className="">
-            <button className="lg:text-[28px] text-[22px] cursor-pointer">
+            <button onClick={handleLogout} className="lg:text-[28px] text-[22px] cursor-pointer">
               <RiShutDownLine color="#fff" />
             </button>
           </li>

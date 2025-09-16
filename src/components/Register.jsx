@@ -1,7 +1,11 @@
 import React ,{useState}from 'react'
 import { FaUserPlus } from "react-icons/fa";
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth ,db } from '../firebase/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
-const Register = () => {
+
+const Register = ({isLogin, setIsLogin}) => {
 
   const [userData, setUserData]=useState({fullName: "", email: "", password: ""})
 
@@ -15,9 +19,21 @@ const Register = () => {
       }
     ) ) 
   }
-  const handleAuth = () =>{
+  const handleAuth = async () =>{
     try{
-      alert("Registration Sucessful")
+      const userCredentials = await createUserWithEmailAndPassword(auth, userData?.email, userData?.password);
+      const user = userCredentials.user;
+
+      const userDocRef = doc(db, "user",user.uid);
+
+      await setDoc(userDocRef,{
+        uid: user.uid,
+        email: user.email,
+        username: user.email?.split("@")[0],
+        fullName: userData.fullName,
+        image: "",
+
+      })
     }
     catch(error){
       console.log(error)
@@ -42,7 +58,7 @@ const Register = () => {
           </button>
         </div>
         <div className='mt-5 text-center text-gray-400'>
-          <button >
+          <button onClick={() => setIsLogin(!isLogin)}>
             Already have an Account? Sign In
           </button>
         </div>
