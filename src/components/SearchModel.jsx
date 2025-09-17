@@ -6,7 +6,7 @@ import defaultProfile from '../../public/assets/user_1.png'
 import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore'
 import { db } from '../firebase/firebase'
 
-const SearchModel = () => {
+const SearchModel = ({ startChat }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -70,7 +70,11 @@ const SearchModel = () => {
 
                 <div className='mt-6'>
                   {users?.map((user) => (
-                    <div className='flex items-start gap-3 bg-[#aebef6] p-2 mb-3 rounded-lg cursor-pointer border border-[#ffffff20] shadow-lg '>
+                    <div onClick={()=>{
+                      console.log(user);
+                      startChat(user);
+                    }}
+                    className='flex items-start gap-3 bg-[#aebef6] p-2 mb-3 rounded-lg cursor-pointer border border-[#ffffff20] shadow-lg '>
                       <img src={user?.image || defaultProfile} className="h-[50px] w-[60px] rounded-full" alt='' />
                       <span>
                         <h2 className="p-0 font-semibold text-white text-[18px]">{user?.fullName}</h2>

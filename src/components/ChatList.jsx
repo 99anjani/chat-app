@@ -16,6 +16,10 @@ const ChatList = () => {
       unsubscribe();
     }
   }, []);
+
+  const startChat = () => {
+    alert("Chat Started")
+  }
   
   const sortedChats = useMemo(()=>{
     return [...chats].sort((a,b) => {
@@ -44,7 +48,7 @@ const ChatList = () => {
       <div className='w-[100%] mt-[10px] px-5'>
         <header className='flex items-center justify-between'>
           <h3 className='text-[16px]'>Message ({chats?.length || 0})</h3>
-          <SearchModel/>
+          <SearchModel startChat= {startChat}/>
         </header>
       </div>
 
