@@ -25,7 +25,7 @@ const Register = ({isLogin, setIsLogin}) => {
       const userCredentials = await createUserWithEmailAndPassword(auth, userData?.email, userData?.password);
       const user = userCredentials.user;
 
-      const userDocRef = doc(db, "user",user.uid);
+      const userDocRef = doc(db, "users",user.uid);
 
       await setDoc(userDocRef,{
         uid: user.uid,

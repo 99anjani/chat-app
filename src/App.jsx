@@ -11,6 +11,7 @@ const App = () => {
 
   const [isLogin , setIsLogin] = useState(true);
   const [user, setUser] = useState(null);
+  const [selectedUser , setSelectedUser] = useState(null);
 
   useEffect (() => {
     const currentUser = auth.currentUser;
@@ -23,14 +24,15 @@ const App = () => {
 
     return ()=> unsubscribe(); //cleanup
   },[])
+
   return (
     
     <div>
       {user? (
         <div className='flex lg:flex-row flex-col items-start w-[100%]' >
           <Navlinks />
-          <ChatList />
-          <ChatBox />
+          <ChatList setSelectedUser={setSelectedUser}/>
+          <ChatBox selectedUser={selectedUser} />
         </div >
       ):(
           <div>

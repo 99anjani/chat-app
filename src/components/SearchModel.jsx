@@ -22,7 +22,7 @@ const SearchModel = ({ startChat }) => {
     }
     try{
       const lowSearchTerm = searchTerm.toLowerCase();
-      const q = query(collection(db, "user"), where("username", ">=", lowSearchTerm), where("username", "<=", lowSearchTerm + "\uf8ff"));
+      const q = query(collection(db, "users"), where("username", ">=", lowSearchTerm), where("username", "<=", lowSearchTerm + "\uf8ff"));
       const querySnapshot = await getDocs(q);
 
       const foundUsers = [];
@@ -44,7 +44,7 @@ const SearchModel = ({ startChat }) => {
 
   return (
     <div>
-      <button onClick={openModal} className='bg-[#C3CFF9] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg'>
+      <button onClick={openModal} className='bg-[#C3CFF9] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg cursor-pointer'>
         <RiSearchLine color="#080659" className='w-[18px] h-[18px]' />
       </button>
 
@@ -54,7 +54,7 @@ const SearchModel = ({ startChat }) => {
             <div className='relative bg-[#98adf7] w-[100%] rounded-xl shadow-xl'>
               <div className='flex items-center justify-between p-4 md:p-5 border-b border-gray-300'>
                 <h3 className="text-xl font-semibold text-white">Search Chat</h3>
-                <button className="text-white bg-transparent hover:bg-[#d9f2ed] hover:text-[#080659] rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
+                <button className="text-white bg-transparent hover:bg-[#d9f2ed] hover:text-[#080659] rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center cursor-pointer">
                   <FaXmark size={20} onClick={closeModal} />
                 </button>
               </div>
@@ -62,7 +62,7 @@ const SearchModel = ({ startChat }) => {
                 <div className="space-y-4">
                   <div className="flex gap-2">
                     <input onChange={(e)=> setSearchTerm(e.target.value)} type="text" className="bg-white border border-gray-300 text-[#080659] text-sm rounded-lg outline-none w-full p-2.5" placeholder="Search users" />
-                    <button onClick={handleSearch} className="bg-[#080659] text-white px-3 py-2 rounded-lg">
+                    <button onClick={handleSearch} className="bg-[#080659] text-white px-3 py-2 rounded-lg cursor-pointer">
                       <FaSearch />
                     </button>
                   </div>
