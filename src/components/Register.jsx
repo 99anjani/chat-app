@@ -3,6 +3,7 @@ import { FaUserPlus } from "react-icons/fa";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth ,db } from '../firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 
 const Register = ({isLogin, setIsLogin}) => {
@@ -20,6 +21,14 @@ const Register = ({isLogin, setIsLogin}) => {
     ) ) 
   }
   const handleAuth = async () =>{
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Validation
+    if (!fullName.trim() || !email.trim() || !password.trim()) {
+      toast.error("All fields are required!");
+      return;
+    }
     setIsLoading(true);
     try{
       const userCredentials = await createUserWithEmailAndPassword(auth, userData?.email, userData?.password);
@@ -35,9 +44,13 @@ const Register = ({isLogin, setIsLogin}) => {
         image: "",
 
       })
+
+      toast.success("Registration successful!");
     }
     catch(error){
-      console.log(error)
+      if (error.code === "auth/email-already-in-use") toast.error("Email already registered.");
+      else if (error.code === "auth/weak-password") toast.error("Password should be at least 6 characters.");
+      else toast.error(error.message);
     } finally {
       setIsLoading(false)
     }

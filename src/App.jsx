@@ -5,7 +5,9 @@ import Navlinks from './components/Navlinks';
 import chatBox from './components/ChatBox';
 import ChatList from './components/ChatList';
 import ChatBox from './components/ChatBox';
-import {auth} from "./firebase/firebase"
+import {auth} from "./firebase/firebase";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
 
@@ -28,6 +30,16 @@ const App = () => {
   return (
     
     <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
       {user? (
         <div className='flex lg:flex-row flex-col items-start w-[100%]' >
           <Navlinks />
