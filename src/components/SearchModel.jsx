@@ -37,7 +37,7 @@ const SearchModel = ({ startChat }) => {
         alert("No Users Found")
       }
     }catch(error){
-      console.log(error);
+      console.error(error);
     }
 
   }

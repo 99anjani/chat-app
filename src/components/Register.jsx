@@ -1,7 +1,7 @@
 import React ,{useState}from 'react'
 import { FaUserPlus } from "react-icons/fa";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth ,db } from '../firebase/firebase';
+import { addNotification, auth ,db } from '../firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
@@ -22,15 +22,22 @@ const Register = ({isLogin, setIsLogin}) => {
   }
   const handleAuth = async () =>{
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const { fullName, email, password } = userData;
 
     // Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!fullName.trim() || !email.trim() || !password.trim()) {
       toast.error("All fields are required!");
       return;
     }
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    
     setIsLoading(true);
     try{
+      
       const userCredentials = await createUserWithEmailAndPassword(auth, userData?.email, userData?.password);
       const user = userCredentials.user;
 
@@ -44,6 +51,12 @@ const Register = ({isLogin, setIsLogin}) => {
         image: "",
 
       })
+
+      await addNotification(
+        user.uid,
+        "Welcome to our chat app! Your account has been created successfully.",
+        "registration"
+      );
 
       toast.success("Registration successful!");
     }

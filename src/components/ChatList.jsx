@@ -38,7 +38,6 @@ const ChatList = ({ setSelectedUser }) => {
     return [...chats].sort((a, b) => {
       const aTimestamp = a?.lastMessageTimestamp?.seconds + a?.lastMessageTimestamp?.nanoseconds / 1e9;
       const bTimestamp = b?.lastMessageTimestamp?.seconds + b?.lastMessageTimestamp?.nanoseconds / 1e9;
-
       return bTimestamp - aTimestamp;
     });
   }, [chats]);

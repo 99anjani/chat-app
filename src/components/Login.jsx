@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
 import { TbLogin2 } from "react-icons/tb";
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase/firebase';
+import { addNotification, auth, db } from '../firebase/firebase';
 import { toast } from "react-toastify";
+import { doc, getDoc } from 'firebase/firestore';
 
 const Login = ({ isLogin, setIsLogin }) => {
 
@@ -23,7 +24,19 @@ const Login = ({ isLogin, setIsLogin }) => {
     const handleAuth = async() =>{
       setIsLoading(true);
       try{
-        await signInWithEmailAndPassword(auth,  userData?.email, userData.password)
+        await signInWithEmailAndPassword(auth,  userData?.email, userData.password);
+
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if(userDoc.exists()){
+          await addNotification(
+            auth.currentUser.uid,
+            "You have successfully logged in",
+            "login"
+          )
+        }
+
         toast.success("Login successful!");
       }
       catch(error){
@@ -31,8 +44,6 @@ const Login = ({ isLogin, setIsLogin }) => {
         else if (error.code === "auth/wrong-password") toast.error("Incorrect password.");
         else if (error.code === "auth/invalid-email") toast.error("Invalid email address.");
         else toast.error(error.message);
-        // console.log(error)
-        // alert(error.message)
       } finally{
         setIsLoading(false)
       }

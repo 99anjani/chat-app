@@ -1,6 +1,6 @@
 import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
-import {addDoc, collection, doc, getDoc, getFirestore, onSnapshot, serverTimestamp, setDoc, updateDoc} from "firebase/firestore";
+import {addDoc, collection, deleteDoc, doc, getDoc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, Timestamp, updateDoc, where} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA76BAT8ksb2fvWHoCisIqIGm9W_enc-7s",
@@ -69,6 +69,15 @@ export const sendMessage = async (messageText, chatId, user1,user2) =>{
     timestamp: serverTimestamp(),
   });
 
+  const recipientId = user1 === auth.currentUser.uid ? user2.uid : user1.uid;
+
+  await addNotification(
+    recipientId,
+    "new message",
+    `New message from ${auth.currentUser.email}`,
+    { chatId, sender: auth.currentUser.email }
+  );
+
 };
 
 export const listenForMessages = (chatId, setMessages) => {
@@ -78,4 +87,80 @@ export const listenForMessages = (chatId, setMessages) => {
     setMessages(messages);
   });
 };
+
+export const addNotification = async (recipientId , message, type="info") => {
+  try{
+
+    const notificationRef = collection(db, "notifications");
+    await addDoc(notificationRef,{
+      message,
+      type,
+      recipientId,
+      read: false,
+      timestamp: serverTimestamp(),
+      expiresAt: Timestamp.fromDate(new Date(Date.now() + 24 * 60 * 60 * 1000))
+    })
+
+  } catch(error){
+    console.error("Error adding notification:", error);
+  }
+}
+export const cleanupExpiredNotifications = async() => {
+  try{
+    const now = new Date();
+    const q = query(
+      collection(db, "notifications"),
+      where("expiresAt","<",now)
+    )
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach( async (document)=> {
+
+      await deleteDoc(doc(db, "notifications", document.id))
+      
+    });
+  }
+  catch(error){
+    console.error("Error cleaning up notifications:", error);
+  }
+}
+
+export const markAsRead = async (notificationId) => {
+  try{
+    const notificationRef = doc(db, "notifications", notificationId);
+
+    await updateDoc(otificationRef, {
+      read: true
+    });
+    
+  }
+  catch(error){
+    console.error("Error marking notification as read:", error)
+  }
+}
+
+export const listenForNotifications = (userId, callback) => {
+
+  cleanupExpiredNotifications();
+
+  const q = query(
+    collection(db, "notifications"),
+    where("recipientId", "==", userId),
+    orderBy("timestamp", "desc")
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    const notifications = [];
+
+    snapshot.forEach((doc)=>{
+      notifications.push({
+        id: doc.id,
+        ...doc.data()
+      })
+    });
+    callback(notifications);
+  });
+
+}
 export {auth, db} ;

@@ -3,16 +3,22 @@ import logo from '../../public/assets/logo.png'
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import { RiArrowDownSFill, RiBardLine, RiChatAiFill, RiChatAiLine, RiFile4Line, RiFolderUserLine, RiNotificationLine, RiShutDownLine } from "react-icons/ri";
+import NotificationDropdown from './NotificationDropdown';
 
 
 const Navlinks = () => {
 
   const handleLogout = async () => {
     try {
+
+
       await signOut (auth)
+
       alert("Logout Successfull")
+
+      
     } catch (error){
-      cons(error)
+      console.error(error);
     }
   }
   return (
@@ -36,9 +42,7 @@ const Navlinks = () => {
             </button>
           </li>
           <li className="">
-            <button className="lg:text-[28px] text-[22px] cursor-pointer">
-              <RiNotificationLine color="#fff" />
-            </button>
+            <NotificationDropdown/>
           </li>
           <li className="">
             <button className="lg:text-[28px] text-[22px] cursor-pointer">
