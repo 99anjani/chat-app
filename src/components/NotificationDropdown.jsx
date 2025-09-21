@@ -8,6 +8,7 @@ const NotificationDropdown = () => {
     const [open, setOpen] = useState(false);
     const closeModal = () => setOpen(false);
 
+
     return (
         <div className='relative'>
             <button
@@ -37,7 +38,7 @@ const NotificationDropdown = () => {
                                     {notifications.map((notif) => (
                                         <div key={notif.id} className="mb-3 p-2 bg-white rounded shadow">
                                             <p className="text-black font-medium">{notif.message}</p>
-                                            <span className="text-sm text-gray-500">{notif.time}</span>
+                                            <span className="text-sm text-gray-500">{notif.timestamp?.toDate().toLocaleString()}</span>
                                         </div>
                                     ))}
                                 </div>

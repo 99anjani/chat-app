@@ -1,6 +1,7 @@
 import { addDoc, collection } from "firebase/firestore";
 import React, {  createContext, useContext, useEffect, useState } from "react";
 import { addNotification, auth, listenForNotifications, markAsRead } from "../firebase/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const NotificationContext = createContext();
 
@@ -10,18 +11,23 @@ export const NotificationProvider = ({ children }) => {
 
     const [notifications, setNotifications] = useState([]);
 
-    useEffect(()=>{
-        let unsubscribe;
+    useEffect(() => {
+        let unsubscribeNotif;
+        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                unsubscribeNotif = listenForNotifications(user.uid, (notifs) => {
+                    setNotifications(notifs);
+                });
+            } else {
+                setNotifications([]); 
+            }
+        });
 
-        if (auth.currentUser){
-            unsubscribe = listenForNotifications(auth.currentUser.uid, (notifs) => {
-                setNotifications(notifs);
-            })
-        }
         return () => {
-            if (unsubscribe) unsubscribe();
+            if (unsubscribeNotif) unsubscribeNotif();
+            unsubscribeAuth();
         };
-    },[])
+    }, [])
 
     const pushNotification = async (recipientId, message, type = "info") => {
         await addNotification(recipientId, message, type);

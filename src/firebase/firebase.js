@@ -1,6 +1,6 @@
 import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
-import {addDoc, collection, deleteDoc, doc, getDoc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, Timestamp, updateDoc, where} from "firebase/firestore";
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, Timestamp, updateDoc, where} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA76BAT8ksb2fvWHoCisIqIGm9W_enc-7s",
@@ -69,13 +69,12 @@ export const sendMessage = async (messageText, chatId, user1,user2) =>{
     timestamp: serverTimestamp(),
   });
 
-  const recipientId = user1 === auth.currentUser.uid ? user2.uid : user1.uid;
+  const recipientId = user1 === auth.currentUser.uid ? user2 : user1;
 
   await addNotification(
-    recipientId,
-    "new message",
-    `New message from ${auth.currentUser.email}`,
-    { chatId, sender: auth.currentUser.email }
+    recipientId, 
+    `New message from ${auth.currentUser.email}: ${messageText}`,
+    "message" 
   );
 
 };
@@ -130,7 +129,7 @@ export const markAsRead = async (notificationId) => {
   try{
     const notificationRef = doc(db, "notifications", notificationId);
 
-    await updateDoc(otificationRef, {
+    await updateDoc(notificationRef, {
       read: true
     });
     
@@ -146,8 +145,7 @@ export const listenForNotifications = (userId, callback) => {
 
   const q = query(
     collection(db, "notifications"),
-    where("recipientId", "==", userId),
-    orderBy("timestamp", "desc")
+    where("recipientId", "==", userId)
   );
 
   return onSnapshot(q, (snapshot) => {
@@ -158,6 +156,12 @@ export const listenForNotifications = (userId, callback) => {
         id: doc.id,
         ...doc.data()
       })
+    });
+
+    notifications.sort((a, b) => {
+      const t1 = a.timestamp?.toDate() || 0;
+      const t2 = b.timestamp?.toDate() || 0;
+      return t2 - t1;
     });
     callback(notifications);
   });
