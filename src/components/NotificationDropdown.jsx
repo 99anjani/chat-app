@@ -12,15 +12,26 @@ const NotificationDropdown = () => {
     return (
         <div className='relative'>
             <button
-                onClick={() => setOpen(!open)}
+                onClick={() => {setOpen(!open);
+                    if(!open){
+                        notifications.forEach((notif) => {
+                            if(!notif.read) markNotificationAsRead(notif.id);
+                        });
+
+                    }
+
+                }}
                 className="lg:text-[28px] text-[22px] cursor-pointer relative"
             >
                 <RiNotificationLine color="#fff" />
-                {notifications.length > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[12px] px-1 rounded-full">
-                        {notifications.length}
-                    </span>
-                )}
+                {
+                    notifications.filter(n=> !n.read).length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[12px] px-1 rounded-full">
+                            {notifications.filter(n => !n.read).length}
+                        </span>
+                    )
+                }
+
             </button>
 
             {open && (
@@ -28,8 +39,8 @@ const NotificationDropdown = () => {
                     <div className='relative bg-[#98adf7] w-[40%] rounded-xl shadow-xl'>
                         <div className='flex items-center justify-between p-4 md:p-5 border-b border-gray-300'>
                             <h3 className="text-2xl font-semibold text-white ">Notifications</h3>
-                            <button className="text-white bg-transparent hover:bg-[#d9f2ed] hover:text-[#080659] rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center cursor-pointer">
-                            <FaXmark size={20} onClick={closeModal} />
+                            <button className="text-white bg-transparent hover:bg-[#d9f2ed] hover:text-[#080659] rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center cursor-pointer" onClick={closeModal} >
+                            <FaXmark size={20} />
                             </button>
                         </div>
                         <div className="p-4 md:p-5 mt-0">

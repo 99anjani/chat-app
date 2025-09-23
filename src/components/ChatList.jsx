@@ -6,10 +6,14 @@ import chatData from '../data/chats'
 import { formatTimestamp } from '../utils/formatTimeStamp'
 import { auth, db, listenForChats} from '../firebase/firebase'
 import { doc, onSnapshot } from 'firebase/firestore'
+import ProfileModal from './ProfileModal'
+
 const ChatList = ({ setSelectedUser }) => {
 
   const [chats,setChats]=useState([]);
-  const[user,setUser] = useState(null);
+  const [user,setUser] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   useEffect(() => {
     const userDocRef = doc(db, "users", auth?.currentUser?.uid);
@@ -42,19 +46,38 @@ const ChatList = ({ setSelectedUser }) => {
     });
   }, [chats]);
 
+
+
   return (
     <section className='relative hidden lg:flex flex-col items-start justify-start bg-white h-[100vh] md:w-[450px]'>
       <header className='flex items-center justify-between w-[100%] lg:border-b border-gray-500 border-b-2 p-6 sticky md:static top-0 z-[100]'>
         <main className='flex items-center gap-3'>
-          <img src={defaultProfile} className='w-[54px] h-[54px] object-cover rounded-full' alt='' />
+          <img src={user?.image || defaultProfile} className='w-[54px] h-[54px] object-cover rounded-full' alt='' />
           <span>
             <h3 className='p-0 font-semibold text-[#080659] md:text-[17px]'>{user?.fullName || 'John Doe'}</h3>
             <p className='p-0 font-light text-[#080659] md:text-[15px]'>@{ user?.username || "john"}</p>
           </span>
         </main>
-        <button className='bg-[#C3CFF9] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg'>
-          <RiMore2Fill color='#080659' className='h-[28px] w-[28px] cursor-pointer' />
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className='bg-[#C3CFF9] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg'
+          >
+            <RiMore2Fill color='#080659' className='h-[28px] w-[28px] cursor-pointer' />
+          </button>
+
+
+          {showMenu && (
+            <div className="absolute right-0 mt-2 w-[150px] bg-white border border-gray-300 rounded-lg shadow-md z-50">
+              <button
+                onClick={() => { setShowProfileModal(true); setShowMenu(false); }}
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+              >
+                Update Profile
+              </button>
+            </div>
+          )}
+        </div>
       </header>
 
       <div className='w-[100%] mt-[10px] px-5'>
@@ -86,6 +109,13 @@ const ChatList = ({ setSelectedUser }) => {
             </button>
         ))}
       </main>
+
+      {showProfileModal && (
+        <ProfileModal
+          user={user}
+          onClose={() => setShowProfileModal(false)}
+        />
+      )}
       
     </section>
   )

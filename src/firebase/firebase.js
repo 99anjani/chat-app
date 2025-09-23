@@ -17,11 +17,30 @@ const db = getFirestore(app);
 
 export const listenForChats = (setChats) => {
   const chatsRef = collection(db, "chats");
-  const unsubscribe = onSnapshot(chatsRef, (snapshot) => {
-    const chatList = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+  // const unsubscribe = onSnapshot(chatsRef, (snapshot) => {
+  //   const chatList = snapshot.docs.map((doc) => ({
+  //     id: doc.id,
+  //     ...doc.data(),
+  //   }));
+  const unsubscribe = onSnapshot(chatsRef, async (snapshot) => {
+    const chatList = await Promise.all(
+      snapshot.docs.map(async (docSnap) => {
+        const chatData = docSnap.data();
+
+        const refreshedUsers = await Promise.all(
+          chatData.users.map(async (u) => {
+            const userDoc = await getDoc(doc(db, "users", u.uid));
+            return userDoc.exists() ? { ...u, ...userDoc.data() } : u;
+          })
+        );
+
+        return {
+          id: docSnap.id,
+          ...chatData,
+          users: refreshedUsers,
+        };
+      })
+    );
 
     const filteredChats = chatList.filter((chat) => chat?.users?.some((user) => user.email === auth.currentUser.email));
 
@@ -67,6 +86,7 @@ export const sendMessage = async (messageText, chatId, user1,user2) =>{
     text: messageText,
     sender: auth.currentUser.email,
     timestamp: serverTimestamp(),
+    read: false
   });
 
   const recipientId = user1 === auth.currentUser.uid ? user2 : user1;
@@ -167,4 +187,42 @@ export const listenForNotifications = (userId, callback) => {
   });
 
 }
+
+export const updateUserInChats = async (uid, updatedUserData) => {
+
+  try{
+
+    const chatsRef = collection(db, "chats");
+    const allChatsSnapshot = await getDocs(chatsRef);
+
+    const userChats = allChatsSnapshot.docs.filter(chatDoc =>{
+      const chatData = chatDoc.data();
+      return chatData.users?.some((u) => u.uid === uid);
+    }
+      
+    );
+
+    const updatePromises = userChats.map(async (chatDoc) => {
+      const chatData = chatDoc.data();
+
+      const updatedUsers = chatData.users.map(u =>
+        u.uid === uid ? { ...u, ...updatedUserData } : u
+      );
+
+      await updateDoc(doc(db, "chats", chatDoc.id), {
+        users: updatedUsers,
+      });
+    });
+
+    await Promise.all(updatePromises);
+
+    console.log("User details updated in all chats");
+
+
+  } catch (error) {
+    console.error("Error updating user in chats:", error);
+  }
+
+}
+
 export {auth, db} ;
