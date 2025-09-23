@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import defaultProfile from "../../public/assets/default.jpg"
 import { collection, doc, query, updateDoc, where } from 'firebase/firestore';
-import { auth, db, updateUserInChats } from '../firebase/firebase';
+import { addNotification, auth, db, updateUserInChats } from '../firebase/firebase';
 import { FaXmark } from 'react-icons/fa6';
+import { toast } from 'react-toastify';
 
 const ProfileModal = ({user , onClose}) => {
 
@@ -30,7 +31,7 @@ const ProfileModal = ({user , onClose}) => {
                 username,
                 image
             });
-            onClose();
+            
 
             await  updateUserInChats((auth.currentUser.uid),{
                 fullName,
@@ -39,6 +40,14 @@ const ProfileModal = ({user , onClose}) => {
                 email: auth.currentUser.email,
                 uid: auth.currentUser.uid
             })
+
+            await addNotification(auth.currentUser.uid, `Your profile has been updated: ${fullName} (@${username})`,"Profile Updated")
+
+            toast.success("Update Sucessfull")
+
+            onClose();
+
+
 
         }catch(error){
             console.error("Error updating profile:", error);
@@ -55,7 +64,7 @@ const ProfileModal = ({user , onClose}) => {
                 <FaXmark size={20} />
                 </button>
             </div>
-            <div className="p-4 md:p-5 mt-0">
+            <div className="p-4 md:p-5 mt-0 bg-[#c9def3]">
                 <div className="mt-4">
                     <label className="block mb-2">Full Name</label>
                     <input

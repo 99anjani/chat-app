@@ -1,25 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '../../public/assets/logo.png'
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import { RiArrowDownSFill, RiBardLine, RiChatAiFill, RiChatAiLine, RiFile4Line, RiFolderUserLine, RiNotificationLine, RiShutDownLine } from "react-icons/ri";
 import NotificationDropdown from './NotificationDropdown';
+import ContactUsersModal from './ContactUsersModal';
 
 
-const Navlinks = () => {
+const Navlinks = ({ setSelectedUser }) => {
+
+  const [isContactOpen, setIsContactOpen] = useState(false)
 
   const handleLogout = async () => {
     try {
-
-
       await signOut (auth)
-
       alert("Logout Successfull")
-
-      
     } catch (error){
       console.error(error);
     }
+  }
+
+  const startChat = (user) =>{
+    setIsContactOpen(false)
+    setSelectedUser(user)
   }
   return (
     <section className='sticky lg:static top-0 flex items-center lg:items-start lg:justify-start h-[7vh] lg:h-[100vh] w-[100%] lg:w-[100px] py-8 lg:py-0 bg-[#0a0838]'>
@@ -37,7 +40,7 @@ const Navlinks = () => {
             </button>
           </li>
           <li className="">
-            <button className="lg:text-[28px] text-[22px] cursor-pointer">
+            <button onClick={() => setIsContactOpen(true)} className="lg:text-[28px] text-[22px] cursor-pointer">
               <RiFolderUserLine color="#fff" />
             </button>
           </li>
@@ -64,7 +67,11 @@ const Navlinks = () => {
           <RiArrowDownSFill color="#fff" />
         </button>
       </main>
-
+      <ContactUsersModal
+      isOpen={isContactOpen}
+      onClose={()=> setIsContactOpen(false)}
+      startChat={startChat}
+      />
 
     </section>
   )

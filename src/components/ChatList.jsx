@@ -71,7 +71,7 @@ const ChatList = ({ setSelectedUser }) => {
             <div className="absolute right-0 mt-2 w-[150px] bg-white border border-gray-300 rounded-lg shadow-md z-50">
               <button
                 onClick={() => { setShowProfileModal(true); setShowMenu(false); }}
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                className="block w-full text-left px-4 py-2 hover:bg-[#e2e6f6]  rounded-lg shadow-md"
               >
                 Update Profile
               </button>

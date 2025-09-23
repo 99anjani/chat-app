@@ -93,7 +93,7 @@ const ChatBox = ({ selectedUser }) => {
                       :
                       (<div className='flex flex-col items-start w-full'>
                         <span className='flex gap-3 w-[40%] h-auto ms-10 items-start'>
-                          <img src={defaultProfile} className='w-11 h-11 rounded-full object-cover' />
+                          <img src={selectedUser?.image || defaultProfile} className='w-11 h-11 rounded-full object-cover' />
                           <div className='h-auto font-light'>
                             <div className='flex items-center bg-white justify-center p-4 rounded-xl'>
                               <h4>{msg.text}</h4>
