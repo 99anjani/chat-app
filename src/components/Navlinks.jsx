@@ -1,20 +1,30 @@
 import React, { useState } from 'react'
 import logo from '../../public/assets/logo.png'
 import { signOut } from 'firebase/auth';
-import { auth } from '../firebase/firebase';
+import { addNotification, auth } from '../firebase/firebase';
 import { RiArrowDownSFill, RiBardLine, RiChatAiFill, RiChatAiLine, RiFile4Line, RiFolderUserLine, RiNotificationLine, RiShutDownLine } from "react-icons/ri";
 import NotificationDropdown from './NotificationDropdown';
 import ContactUsersModal from './ContactUsersModal';
+import { toast } from 'react-toastify';
+import LogoutConfirmModal from './LogoutConfirmModal';
 
 
 const Navlinks = ({ setSelectedUser }) => {
 
-  const [isContactOpen, setIsContactOpen] = useState(false)
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm]= useState(false);
 
   const handleLogout = async () => {
     try {
-      await signOut (auth)
-      alert("Logout Successfull")
+      const userId = auth.currentUser?.uid;
+
+      if (!userId) return;
+      await signOut (auth);
+
+      await addNotification(userId, "You have successfully logged out","logout");
+
+      toast.success("Logout Successfull !!")
+      setShowLogoutConfirm(false)
     } catch (error){
       console.error(error);
     }
@@ -58,7 +68,7 @@ const Navlinks = ({ setSelectedUser }) => {
             </button>
           </li>
           <li className="">
-            <button onClick={handleLogout} className="lg:text-[28px] text-[22px] cursor-pointer">
+            <button onClick={() => setShowLogoutConfirm(true)} className="lg:text-[28px] text-[22px] cursor-pointer">
               <RiShutDownLine color="#fff" />
             </button>
           </li>
@@ -72,6 +82,14 @@ const Navlinks = ({ setSelectedUser }) => {
       onClose={()=> setIsContactOpen(false)}
       startChat={startChat}
       />
+
+      <LogoutConfirmModal
+      isOpen={showLogoutConfirm}
+      onConfirm={handleLogout}
+      onCancel={()=>setShowLogoutConfirm(false)}
+      />
+
+
 
     </section>
   )
