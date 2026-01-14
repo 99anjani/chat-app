@@ -13,7 +13,11 @@ const SearchModel = ({ startChat }) => {
   const [users, setUsers] = useState([]);
 
   const openModal = () => setIsModalOpen (true);
-  const closeModal = () =>  setIsModalOpen (false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setUsers([]); 
+  };
+
 
   const handleSearch = async () => {
     if(!searchTerm.trim()){

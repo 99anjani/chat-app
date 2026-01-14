@@ -79,7 +79,7 @@ const ChatList = ({ setSelectedUser }) => {
             <p className='p-0 font-light text-[#080659] md:text-[15px]'>@{ user?.username || "john"}</p>
           </span>
         </main>
-        <div className="relative">
+        <div className="relative " onBlur={() => setShowMenu(false)}>
           <button
             onClick={() => setShowMenu(!showMenu)}
             className='bg-[#C3CFF9] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg'
