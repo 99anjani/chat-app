@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import defaultProfile from '../../public/assets/user_1.png'
 import { RiMore2Fill } from 'react-icons/ri'
 import SearchModel from './SearchModel'
 import chatData from '../data/chats'
 import { formatTimestamp } from '../utils/formatTimeStamp'
-import { auth, db, listenForChats} from '../firebase/firebase'
+import { auth, db, listenForChats, listenForUnreadCount} from '../firebase/firebase'
 import { doc, onSnapshot } from 'firebase/firestore'
 import ProfileModal from './ProfileModal'
 
@@ -14,6 +14,8 @@ const ChatList = ({ setSelectedUser }) => {
   const [user,setUser] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [unreadCounts, setUnreadCounts] = useState({});
+  const unreadUnsubscribesRef = useRef({});
 
   useEffect(() => {
     const userDocRef = doc(db, "users", auth?.currentUser?.uid);
@@ -32,6 +34,25 @@ const ChatList = ({ setSelectedUser }) => {
       unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    Object.values(unreadUnsubscribesRef.current).forEach((unsub) => unsub());
+    unreadUnsubscribesRef.current = {};
+
+    if (chats.length === 0) return;
+
+    chats.forEach((chat) => {
+      const unsub = listenForUnreadCount(chat.id, (count) => {
+        setUnreadCounts((prev) => ({ ...prev, [chat.id]: count }));
+      });
+      unreadUnsubscribesRef.current[chat.id] = unsub;
+    });
+
+    return () => {
+      Object.values(unreadUnsubscribesRef.current).forEach((unsub) => unsub());
+    };
+  }, [chats]);
+
 
   const startChat = (user) => {
     setSelectedUser(user);
@@ -89,7 +110,7 @@ const ChatList = ({ setSelectedUser }) => {
 
       <main className="flex flex-col items-start mt-[1.5rem] pb-3 custom-scrollbar w-[100%] h-[100%]">
         {sortedChats?.map((chat) => (
-            <button key={chat?.id} className="flex items-start justify-between w-[100%] border-b border-[#9090902c] px-5 pb-3 pt-3">
+          <button key={chat?.id} className={`flex items-start justify-between w-[100%] border-b border-[#9090902c] px-5 pb-3 pt-3 ${unreadCounts[chat.id] > 0 ? 'bg-[#e0e1e3]' : 'bg-white'}`}>
               {
               chat?.users?.filter((user) => user.email !== auth?.currentUser.email)
                   ?.map((user) =>(
@@ -98,10 +119,19 @@ const ChatList = ({ setSelectedUser }) => {
                         <img src={user?.image || defaultProfile} className='h-[50px] w-[50px] rounded-full object-cover' alt='' />
                         <span>
                           <h2 className='p-0 font-semibold text-[#080659] text-[15px] text-left'>{user?.fullName || "John Doe"}</h2>
-                          <p className='p-0 font-light text-[#080659] text-[13px] text-left'>{chat?.lastMessage}</p>
+                          <p className={`p-0 text-[#080659] text-[13px] text-left ${unreadCounts[chat.id] > 0 ? 'font-bold italic' : 'font-light'}`}>{chat?.lastMessage}</p>
                         </span>
                       </div>
-                      <p className='text-[10px] font-light text-gray-400'>{formatTimestamp(chat?.lastMessageTimestamp)}</p>
+                      <div className="flex flex-col items-end justify-between text-right">
+                        <p className={`text-[10px] font-light ${unreadCounts[chat.id] > 0 ? 'text-[#080659] font-bold' : 'text-gray-400'}`}>
+                          {formatTimestamp(chat?.lastMessageTimestamp)}
+                        </p>
+                        {unreadCounts[chat.id] > 0 && (
+                          <span className="bg-blue-800 text-white text-[10px] px-2 py-1 rounded-full">
+                            {unreadCounts[chat.id]}
+                          </span>
+                        )}
+                      </div>
                     </>
                   )
                   )

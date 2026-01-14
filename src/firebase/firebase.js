@@ -81,15 +81,15 @@ export const sendMessage = async (messageText, chatId, user1,user2) =>{
   }
 
   const messageRef = collection(db, "chats", chatId, "messages");
+  const recipientId = user1 === auth.currentUser.uid ? user2 : user1;
 
   await addDoc(messageRef, {
     text: messageText,
     sender: auth.currentUser.email,
+    recipient: recipientId,
     timestamp: serverTimestamp(),
     read: false
   });
-
-  const recipientId = user1 === auth.currentUser.uid ? user2 : user1;
 
   await addNotification(
     recipientId, 
@@ -185,6 +185,35 @@ export const listenForNotifications = (userId, callback) => {
     });
     callback(notifications);
   });
+
+}
+
+export const markMessageAsRead = async (chatId) =>{
+
+  const messageRef = collection(db, "chats", chatId , "messages");
+
+  const q = query(messageRef, where("read", "==", false));
+
+  const snapshot = await getDocs(q);
+
+  const updates = snapshot.docs.filter(doc => doc.data().sender !== auth.currentUser.email).map((msgDoc) => updateDoc(doc(db, "chats", chatId, "messages", msgDoc.id), {
+    read: true,
+  }));
+  await Promise.all(updates);
+
+}
+
+export const listenForUnreadCount = (chatId, setUnreadCount) =>{
+
+  const messageRef = collection(db, "chats", chatId, "messages");
+  const q = query(messageRef, where("read", "==", false), where("recipient", "==", auth.currentUser.uid));
+  // Listen to changes
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    console.log("Unread messages:", snapshot.size); // <-- THIS logs the count correctly
+    setUnreadCount(snapshot.size);
+  });
+
+  return unsubscribe; 
 
 }
 

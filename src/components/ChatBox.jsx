@@ -3,7 +3,7 @@ import defaultProfile from '../../public/assets/user_1.png'
 import { RiSendPlaneFill } from 'react-icons/ri'
 import {messageData} from '../data/messageData'
 import { formatTimestamp } from '../utils/formatTimeStamp'
-import { auth, listenForMessages, sendMessage } from '../firebase/firebase'
+import { auth, listenForMessages, markMessageAsRead, sendMessage } from '../firebase/firebase'
 import logo from '../../public/assets/logo.png'
 
 const ChatBox = ({ selectedUser }) => {
@@ -22,8 +22,13 @@ const ChatBox = ({ selectedUser }) => {
   console.log(user2);
 
   useEffect(() => {
-    listenForMessages(chatId, setMessages);
-  }, [chatId]);
+    if (!selectedUser) return;
+
+    const unsubscribe = listenForMessages(chatId, setMessages);
+    markMessageAsRead(chatId);
+
+    return () => unsubscribe();
+  }, [chatId, selectedUser]);
 
 
 
