@@ -24,7 +24,7 @@ const ContactUsersModal = ({ isOpen, onClose, startChat}) => {
     }
     if (!isOpen) return null;
   return (
-    <div className='fixed inset-0 z-[100] flex justify-center items-center bg-[#00170cb7]'>
+    <div className='fixed inset-0 z-[150] flex justify-center items-center bg-[#00170cb7]'>
             <div className='relative bg-[#98adf7] w-[40%] rounded-xl shadow-xl'>
                 <div className='flex items-center justify-between p-4 md:p-5 border-b border-gray-300'>
                     <h2 className="text-2xl font-semibold text-white ">Contact users</h2>
@@ -32,7 +32,7 @@ const ContactUsersModal = ({ isOpen, onClose, startChat}) => {
                     <FaXmark size={20} />
                     </button>
                 </div>
-                <div className="p-4 md:p-5 mt-0 bg-[#c9def3]">
+              <div className="max-h-[450px] overflow-y-auto pr-2 rounded p-4 md:p-5 mt-0 bg-[#c9def3]">
                 {users.length > 0 ? (
                     users.map((user, index)=>(
                             <div key={index} className='flex items-start gap-3 bg-[#aebef6] p-2 mb-3 rounded-lg cursor-pointer border border-[#ffffff20] shadow-lg' onClick={()=>startChat(user)}>

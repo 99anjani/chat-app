@@ -35,7 +35,7 @@ const NotificationDropdown = () => {
             </button>
 
             {open && (
-                <div className='fixed inset-0 z-[100] flex justify-center items-center bg-[#00170cb7]'>
+                <div className='fixed inset-0 z-[150] flex justify-center items-center bg-[#00170cb7]'>
                     <div className='relative bg-[#98adf7] w-[40%] rounded-xl shadow-xl'>
                         <div className='flex items-center justify-between p-4 md:p-5 border-b border-gray-300'>
                             <h3 className="text-2xl font-semibold text-white ">Notifications</h3>
@@ -45,7 +45,7 @@ const NotificationDropdown = () => {
                         </div>
                         <div className="p-4 md:p-5 mt-0">
                             {notifications.length > 0 ? (
-                                <div>
+                                <div className='max-h-[400px] overflow-y-auto pr-2'>
                                     {notifications.map((notif) => (
                                         <div key={notif.id} className="mb-3 p-2 bg-white rounded shadow">
                                             <p className="text-black font-medium">{notif.message}</p>

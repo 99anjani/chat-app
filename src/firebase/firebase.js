@@ -91,20 +91,27 @@ export const sendMessage = async (messageText, chatId, user1,user2) =>{
     read: false
   });
 
-  await addNotification(
-    recipientId, 
-    `New message from ${auth.currentUser.email}: ${messageText}`,
-    "message" 
+  await addMessageNotification(
+    recipientId,
+    user1Data,
+    messageText
   );
+
+
 
 };
 
 export const listenForMessages = (chatId, setMessages) => {
   const chatRef = collection(db, "chats", chatId, "messages");
-  onSnapshot(chatRef, (snapshot) => {
-    const messages = snapshot.docs.map((doc) => doc.data());
+  const unsubscribe = onSnapshot(chatRef, (snapshot) => {
+    const messages = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
     setMessages(messages);
   });
+
+  return unsubscribe;
 };
 
 export const addNotification = async (recipientId , message, type="info") => {
@@ -253,5 +260,26 @@ export const updateUserInChats = async (uid, updatedUserData) => {
   }
 
 }
+
+export const addMessageNotification = async ( recipientId, senderData, messageText ) => {
+  try {
+    await addDoc(collection(db, "notifications"), {
+      recipientId,
+      type: "message",
+      message: messageText,
+      senderName: senderData.fullName,
+      senderImage: senderData.image,
+      senderId: senderData.uid,
+      read: false,
+      timestamp: serverTimestamp(),
+      expiresAt: Timestamp.fromDate(
+        new Date(Date.now() + 24 * 60 * 60 * 1000)
+      )
+    });
+  } catch (error) {
+    console.error("Error adding message notification:", error);
+  }
+};
+
 
 export {auth, db} ;

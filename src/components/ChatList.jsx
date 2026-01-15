@@ -114,7 +114,7 @@ const ChatList = ({ setSelectedUser }) => {
               {
               chat?.users?.filter((user) => user.email !== auth?.currentUser.email)
                   ?.map((user) =>(
-                    <>
+                    <React.Fragment key = {user.uid || user.email}>
                       <div onClick={() => startChat(user)} className='flex items-start gap-3 cursor-pointer'>
                         <img src={user?.image || defaultProfile} className='h-[50px] w-[50px] rounded-full object-cover' alt='' />
                         <span>
@@ -132,7 +132,7 @@ const ChatList = ({ setSelectedUser }) => {
                           </span>
                         )}
                       </div>
-                    </>
+                    </React.Fragment>
                   )
                   )
               }
