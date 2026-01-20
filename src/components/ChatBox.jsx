@@ -5,6 +5,7 @@ import {messageData} from '../data/messageData'
 import { formatTimestamp } from '../utils/formatTimeStamp'
 import { auth, listenForMessages, markMessageAsRead, sendMessage } from '../firebase/firebase'
 import logo from '../../public/assets/logo.png'
+import { getDayLable, getTimeOnly } from '../utils/dateFormater'
 
 const ChatBox = ({ selectedUser }) => {
   const [messages,setMessages] = useState([]);
@@ -62,10 +63,21 @@ const ChatBox = ({ selectedUser }) => {
     sendMessageText("")
   }
 
+  if (!selectedUser) {
+    return (
+      <section className="h-screen w-full bg-[#d7ddf2] flex flex-col justify-center items-center">
+        <img src={logo} alt="Logo" width={100} />
+        <h1 className="text-3xl font-bold text-[#080659] mt-5">Welcome to Chat</h1>
+        <p className="text-gray-500 text-center mt-2">
+          Connect and chat with friends easily, securely, fast and free
+        </p>
+      </section>
+    );
+  }
+
 
   return ( 
     <>
-    {selectedUser ? (
         <section className='flex flex-col items-start justify-start h-screen w-[100%] chat-background-image'>
           <header className='border-b border-gray-500 w-[100%] h-[115px] p-4 bg-white shadow-sm'>
             <main className='flex items-center gap-3'>
@@ -82,36 +94,50 @@ const ChatBox = ({ selectedUser }) => {
           <main className='custom-scrollbar relative h-[100vh] w-[100%] flex flex-col justify-between'>
             <section className='px-3 pt-5 b-20 lg:pb-10'>
               <div ref={scrollRef} className='overflow-auto h-[80vh]'>
-                {sortedMessages?.map((msg, index) => (
-                  <div key={index}>
-                    {msg?.sender === senderEmail ?
-                      (<div className='flex flex-col items-end'>
-                        <span className='flex gap-3'>
-                          <div className='h-auto font-light me-10'>
-                            <div className='flex items-center justify-center bg-white p-4 rounded-xl'>
-                              <h3 className='font-medium text-[17px] text-gray-800 w-full break-words'> {msg.text}</h3>
-                            </div>
-                            <p className='text-gray-400 text-xs text-right'>{formatTimestamp(msg?.timestamp)}</p>
-                          </div>
-                        </span>
-                      </div>)
-                      :
-                      (<div className='flex flex-col items-start w-full'>
-                        <span className='flex gap-3 w-[40%] h-auto ms-10 items-start'>
-                          <img src={selectedUser?.image || defaultProfile} className='w-11 h-11 rounded-full object-cover' />
-                          <div className='h-auto font-light'>
-                            <div className='flex items-center bg-white justify-center p-4 rounded-xl'>
-                              <h4>{msg.text}</h4>
-                            </div>
-                            <p className='text-gray-400 text-xs text-right'>{formatTimestamp(msg?.timestamp)}</p>
-                          </div>
-                        </span>
-                      </div>)
-                    }
+                {sortedMessages?.map((msg, index) => {
+                  const currentDay = getDayLable(msg.timestamp);
+                  const prevDay = index > 0 ? getDayLable(sortedMessages[index - 1].timestamp) : null;
 
+                  const showDateHeader = currentDay !== prevDay;
+                  const isSender = msg.sender === senderEmail;
+                  
+                  return (
+                    <div key={msg.id || index} className="mb-2">
+                      {/* Date Header */}
+                      {showDateHeader && (
+                        <div className="text-center my-4">
+                          <span className="bg-gray-300 text-gray-700 text-xs px-3 py-1 rounded-full">
+                            {currentDay}
+                          </span>
+                        </div>
+                      )}
 
-                  </div>
-                ))}
+                      {/* Message */}
+                      <div
+                        className={`flex items-start ${isSender ? 'justify-end' : 'justify-start'
+                          }`}
+                      >
+                        {!isSender && (
+                          <img
+                            src={selectedUser?.image || defaultProfile}
+                            className="w-10 h-10 rounded-full object-cover mr-2"
+                          />
+                        )}
+
+                        <div
+                          className={`p-2 rounded-xl max-w-[70%] break-words ${isSender ? 'bg-[#C3CFF9]' : 'bg-white'
+                            }`}
+                        >
+                          <p className="text-gray-800 font-medium text-[17px]">{msg.text}</p>
+                          <p className="text-gray-500 font-medium text-[10px] text-right mt-1">
+                            {getTimeOnly(msg.timestamp)}
+                          </p>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  );
+      })}
 
 
 
@@ -127,15 +153,6 @@ const ChatBox = ({ selectedUser }) => {
             </div>
           </main>
         </section>
-    ):(
-          <section className="h-screen w-[100%] bg-[#d7ddf2]">
-            <div className="flex flex-col justify-center items-center h-[100vh]">
-              <img src={logo} alt="" width={100} />
-              <h1 className="text-[30px] font-bold text-[#080659]  mt-5">Welcome to Chat</h1>
-              <p className="text-gray-500">Connect and chat with friends easily, securely, fast and free</p>
-            </div>
-          </section>
-    )}
     </>
   )
 }
