@@ -3,7 +3,7 @@ import React, {  createContext, useContext, useEffect, useState } from "react";
 import { addNotification, auth, listenForNotifications, markAsRead } from "../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import MessageToast from '../components/MessageToast'
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const NotificationContext = createContext();
 

@@ -1,26 +1,26 @@
-import React ,{useState}from 'react'
+import React, { useState } from 'react'
 import { FaUserPlus } from "react-icons/fa";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { addNotification, auth ,db } from '../firebase/firebase';
+import { addNotification, auth, db } from '../firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { toast } from 'react-toastify';
+import toast from "react-hot-toast";
 
 
-const Register = ({isLogin, setIsLogin}) => {
+const Register = ({ isLogin, setIsLogin }) => {
 
-  const [userData, setUserData]=useState({fullName: "", email: "", password: ""});
+  const [userData, setUserData] = useState({ fullName: "", email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const handleChangeUserData = (e) =>{
-    const {name, value} = e.target;
+  const handleChangeUserData = (e) => {
+    const { name, value } = e.target;
 
     setUserData((prevState) => (
       {
         ...prevState,
-        [name] : value,
+        [name]: value,
       }
-    ) ) 
+    ))
   }
-  const handleAuth = async () =>{
+  const handleAuth = async () => {
 
     const { fullName, email, password } = userData;
 
@@ -34,16 +34,16 @@ const Register = ({isLogin, setIsLogin}) => {
       toast.error("Please enter a valid email address.");
       return;
     }
-    
+
     setIsLoading(true);
-    try{
-      
+    try {
+
       const userCredentials = await createUserWithEmailAndPassword(auth, userData?.email, userData?.password);
       const user = userCredentials.user;
 
-      const userDocRef = doc(db, "users",user.uid);
+      const userDocRef = doc(db, "users", user.uid);
 
-      await setDoc(userDocRef,{
+      await setDoc(userDocRef, {
         uid: user.uid,
         email: user.email,
         username: user.email?.split("@")[0],
@@ -60,7 +60,7 @@ const Register = ({isLogin, setIsLogin}) => {
 
       toast.success("Registration successful!");
     }
-    catch(error){
+    catch (error) {
       if (error.code === "auth/email-already-in-use") toast.error("Email already registered.");
       else if (error.code === "auth/weak-password") toast.error("Password should be at least 6 characters.");
       else toast.error(error.message);
@@ -70,29 +70,33 @@ const Register = ({isLogin, setIsLogin}) => {
   }
 
   return (
-    <section className='flex flex-col justify-center items-center h-[100vh] background-image'>
-      <div className='bg-white shadow-6xl p-5 rounded-2xl h-[30rem] w-[25rem] flex flex-col justify-center items-center'>
-        <div className='mb-10'>
-          <h1 className='text-center font-bold text-[30px]'>Sign Up</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-800 via-sky-950 to-slate-900 p-6">
+
+      {/* Card */}
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 shadow-2xl">
+
+        <div className='text-center mb-4'>
+          <h1 className='text-2xl font-bold text-white'>Sign Up</h1>
           <p className='text-center text-gray-400 text-sm'>Join now and start chatting instantly.</p>
         </div>
+
         <div className='w-full p-2'>
-          <input type='text' name='fullName' onChange={handleChangeUserData} className='border border-blue-600 w-full p-2 rounded-md bg-[#caf1f8] text-[#0a0246] mb-3 font-medium outline-none placeholder:text-[#4d4566]' placeholder='Full Name'/>
-          <input type='email' name='email' onChange={handleChangeUserData}  className='border border-blue-600 w-full p-2 rounded-md bg-[#caf1f8] text-[#0a0246] mb-3 font-medium outline-none placeholder:text-[#4d4566]' placeholder='Email'/>
-          <input type='password' name='password' onChange={handleChangeUserData} className='border border-blue-600 w-full p-2 rounded-md bg-[#caf1f8] text-[#0a0246] mb-3 font-medium outline-none placeholder:text-[#4d4566]' placeholder='Password' />
+          <input type='text' name='fullName' onChange={handleChangeUserData} className='w-full mt-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white outline-none focus:border-indigo-500 mb-1' placeholder='Full Name' />
+          <input type='email' name='email' onChange={handleChangeUserData} className='w-full mt-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white outline-none focus:border-indigo-500 mb-1' placeholder='Email' />
+          <input type='password' name='password' onChange={handleChangeUserData} className='w-full mt-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white outline-none focus:border-indigo-500 mb-1' placeholder='Password' />
         </div>
         <div className='w-full pl-2 pr-2'>
           <button disabled={isLoading} onClick={handleAuth} className='bg-[#22054b] text-[#cfc8ff] font-bold w-full p-2 rounded-md flex items-center gap-2 justify-center'>
-            
+
             {
-              isLoading ? 
-              <>
+              isLoading ?
+                <>
                   Processing...
-              </> :
-              <>
+                </> :
+                <>
                   Register <FaUserPlus />
-              </>
-            }            
+                </>
+            }
           </button>
         </div>
         <div className='mt-5 text-center text-gray-400'>
@@ -100,8 +104,9 @@ const Register = ({isLogin, setIsLogin}) => {
             Already have an Account? Sign In
           </button>
         </div>
+
       </div>
-    </section>
+    </div>
   )
 }
 

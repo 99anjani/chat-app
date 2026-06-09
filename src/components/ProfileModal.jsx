@@ -3,7 +3,7 @@ import defaultProfile from "../../public/assets/default.jpg"
 import { collection, doc, query, updateDoc, where } from 'firebase/firestore';
 import { addNotification, auth, db, updateUserInChats } from '../firebase/firebase';
 import { FaXmark } from 'react-icons/fa6';
-import { toast } from 'react-toastify';
+import toast from "react-hot-toast";
 
 const ProfileModal = ({user , onClose}) => {
 

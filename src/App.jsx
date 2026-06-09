@@ -6,8 +6,9 @@ import chatBox from './components/ChatBox';
 import ChatList from './components/ChatList';
 import ChatBox from './components/ChatBox';
 import {auth} from "./firebase/firebase";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from "react-hot-toast";
 import { NotificationProvider, useNotification } from './context/NotificationContext';
 
 const AppContent = () => {
@@ -48,15 +49,8 @@ const AppContent = () => {
 
 const App = () => (
   <NotificationProvider>
-    <ToastContainer
+    <Toaster
       position="top-right"
-      autoClose={3000}
-      hideProgressBar={false}
-      newestOnTop
-      closeOnClick
-      pauseOnHover
-      draggable
-      theme="colored"
     />
     <AppContent />
   </NotificationProvider>
