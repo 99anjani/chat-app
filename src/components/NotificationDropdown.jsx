@@ -122,7 +122,7 @@ const NotificationDropdown = ({ onClose }) => {
 
     return (
         <div
-            className="fixed inset-0 z-[150] flex items-center justify-center bg-black/50 backdrop-blur-md p-4"
+            className="fixed inset-0 z-[150] flex items-center justify-center bg-black/50 backdrop-blur-md p-4 animate-modal"
             onClick={onClose}
         >
             <div

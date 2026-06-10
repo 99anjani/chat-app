@@ -44,7 +44,7 @@ input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
 }
 
-/* ===== Reusable App Scrollbar ===== */
+/*Scrollbar*/
 .app-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: #8b5cf6 rgba(255, 255, 255, 0.05);
@@ -67,4 +67,21 @@ input:-webkit-autofill:active {
 
 .app-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #a78bfa;
+}
+
+/* component animation */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.animate-modal {
+    animation: modalFadeIn 0.2s ease-out;
 }

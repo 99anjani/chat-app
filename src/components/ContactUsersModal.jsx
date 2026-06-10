@@ -89,7 +89,7 @@ const ContactUsersModal = ({ isOpen, onClose, startChat}) => {
   return (
       <div className='fixed inset-0 z-[150] flex justify-center items-center bg-black/60 backdrop-blur-md
         p-4 ' onClick={(e) => e.target === e.currentTarget && onClose()}>
-        <div className=' w-full max-w-md max-h-[90vh] flex flex-col overflow-hiddenrounded-2xl border border-white/10 bg-[#13113a] shadow-2xl animate-in fade-in zoom-in-95 duration-200 app-scrollbar'>
+          <div className=' w-full max-w-md max-h-[90vh] flex flex-col overflow-hiddenrounded-2xl border border-white/10 bg-[#13113a] shadow-2xl animate-in fade-in zoom-in-95 duration-200 app-scrollbar animate-modal'>
 
               {/* Header */}
               <div className='flex items-center justify-between border-b border-white/10 p-5'>
