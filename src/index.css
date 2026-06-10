@@ -43,3 +43,28 @@ input:-webkit-autofill:active {
     caret-color: white;
     transition: background-color 5000s ease-in-out 0s;
 }
+
+/* ===== Reusable App Scrollbar ===== */
+.app-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #8b5cf6 rgba(255, 255, 255, 0.05);
+}
+
+/* Chrome / Edge / Safari */
+.app-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.app-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+}
+
+.app-scrollbar::-webkit-scrollbar-thumb {
+    background: #b399f1;
+    border-radius: 999px;
+}
+
+.app-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a78bfa;
+}
