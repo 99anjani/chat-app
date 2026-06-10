@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import logo from '../../public/assets/logo.png'
 import { signOut } from 'firebase/auth';
-import { addNotification, auth } from '../firebase/firebase';
-import { RiArrowDownSFill, RiBardLine, RiChatAiFill, RiChatAiLine, RiFile4Line, RiFolderUserLine, RiNotificationLine, RiShutDownLine, RiMenuLine, RiCloseLine, RiNotification2Line } from "react-icons/ri";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { addNotification, auth,db } from '../firebase/firebase';
+import { RiArrowDownSFill, RiBardLine, RiChatAiFill, RiChatAiLine, RiFile4Line, RiFolderUserLine, RiNotificationLine, RiShutDownLine, RiMenuLine, RiCloseLine, RiNotification2Line, RiUserSettingsLine } from "react-icons/ri";
 import NotificationDropdown from './NotificationDropdown';
 import ContactUsersModal from './ContactUsersModal';
 import toast from "react-hot-toast";
 import LogoutConfirmModal from './LogoutConfirmModal';
 import {useNotification} from '../context/NotificationContext';
 import { setUserOffline } from '../firebase/firebase';
+import ProfileEdit from './ProfileEdit';
 const NavItem = ({ icon, label, onClick, active, danger }) => (
   <li className="group relative flex justify-center">
     <button
@@ -55,6 +57,8 @@ const Navlinks = ({ setSelectedUser }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [activeNav, setActiveNav] = useState("chat");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const[isProfileEditOpen, setIsProfileEditOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
   const { notifications, pushNotification, markNotificationAsRead } = useNotification();
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -104,12 +108,38 @@ const Navlinks = ({ setSelectedUser }) => {
       onClick: () => setActiveNav("files"),
     },
     {
-      id: "ai",
-      icon: <RiBardLine size={22} />,
-      label: "AI Assistant",
-      onClick: () => setActiveNav("ai"),
-    },
+      id:"profile",
+      icon: <RiUserSettingsLine size={22} />,
+      label: "Profile",
+      onClick: () => {
+        setActiveNav("profile");
+        setIsProfileEditOpen(true);
+      },
+    }
   ];
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        if (!auth.currentUser) return;
+
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          setUserData({
+            uid: auth.currentUser.uid,
+            email: auth.currentUser.email,
+            ...userSnap.data(),
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadUserData();
+  }, []);
 
   return (
     <>
@@ -217,6 +247,12 @@ const Navlinks = ({ setSelectedUser }) => {
         isOpen={isContactOpen}
         onClose={() => setIsContactOpen(false)}
         startChat={startChat}
+      />
+      <ProfileEdit
+        isOpen={isProfileEditOpen}
+        onClose={() => setIsProfileEditOpen(false)}
+        user={userData}
+        setUserData={setUserData}
       />
 
       <LogoutConfirmModal

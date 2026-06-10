@@ -94,7 +94,7 @@ const ChatList = ({ setSelectedUser }) => {
                 onClick={() => { setShowProfileModal(true); setShowMenu(false); }}
                 className="block w-full text-left px-4 py-2 hover:bg-[#e2e6f6]  rounded-lg shadow-md"
               >
-                Update Profile
+                View Profile
               </button>
             </div>
           )}
@@ -142,6 +142,7 @@ const ChatList = ({ setSelectedUser }) => {
 
       {showProfileModal && (
         <ProfileModal
+          isOpen={showProfileModal}
           user={user}
           onClose={() => setShowProfileModal(false)}
         />
