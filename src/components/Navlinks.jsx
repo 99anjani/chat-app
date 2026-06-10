@@ -8,7 +8,7 @@ import ContactUsersModal from './ContactUsersModal';
 import toast from "react-hot-toast";
 import LogoutConfirmModal from './LogoutConfirmModal';
 import {useNotification} from '../context/NotificationContext';
-
+import { setUserOffline } from '../firebase/firebase';
 const NavItem = ({ icon, label, onClick, active, danger }) => (
   <li className="group relative flex justify-center">
     <button
@@ -32,7 +32,6 @@ const NavItem = ({ icon, label, onClick, active, danger }) => (
       {icon}
     </button>
 
-    {/* Tooltip (desktop only) */}
     <span
       className="
         hidden lg:block
@@ -66,6 +65,7 @@ const Navlinks = ({ setSelectedUser }) => {
       if (!userId) return;
 
       await signOut(auth);
+      await setUserOffline(userId);
       await addNotification(userId, "You have successfully logged out", "logout");
 
       toast.success("Logged out successfully!");

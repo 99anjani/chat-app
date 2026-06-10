@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db, addNotification } from "../firebase/firebase";
 import toast from "react-hot-toast";
 import { doc, getDoc } from "firebase/firestore";
+import { setUserOnline } from "../firebase/firebase";
 
 const Login = ({ isLogin, setIsLogin }) => {
   const [userData, setUserData] = useState({ email: "", password: "" });
@@ -26,10 +27,12 @@ const Login = ({ isLogin, setIsLogin }) => {
 
     try {
       await signInWithEmailAndPassword(auth, userData.email, userData.password);
-
+      const uid = auth.currentUser?.uid;
+      if (uid) {
+        await setUserOnline(uid);
+      }
       const userDocRef = doc(db, "users", auth.currentUser.uid);
       const userDoc = await getDoc(userDocRef);
-
       if (userDoc.exists()) {
         await addNotification(
           auth.currentUser.uid,

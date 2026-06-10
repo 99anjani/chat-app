@@ -2,6 +2,8 @@ import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
 import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, Timestamp, updateDoc, where} from "firebase/firestore";
 import {getStorage} from "firebase/storage";
+import { getDatabase, ref, set, onDisconnect } from "firebase/database";
+import { onValue } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -9,13 +11,15 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  dbUrl: import.meta.env.VITE_FIREBASE_DB_URL,
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const rtdb = getDatabase(app);
 
 export const listenForChats = (setChats) => {
   const chatsRef = collection(db, "chats");
@@ -282,6 +286,40 @@ export const addMessageNotification = async ( recipientId, senderData, messageTe
     console.error("Error adding message notification:", error);
   }
 };
+
+export const setUserOnline = (uid) =>{
+  const userStatusRef = ref(rtdb, `status/${uid}`);
+
+  set(userStatusRef, {
+    online: true,
+    lastSeen: Date.now(),
+  });
+  onDisconnect(userStatusRef).set({
+    online: false,
+    lastSeen: Date.now(),
+  });
+}
+
+export const setUserOffline = async (uid) => {
+  const userStatusRef = ref(rtdb, `/status/${uid}`);
+
+  await set(userStatusRef, {
+    online: false,
+    lastSeen: Date.now(),
+  });
+};
+
+
+export const listenForUserStatus = (uid, callback) => {
+  const userStatusRef = ref(rtdb, `/status/${uid}`);
+  const unsubscribe = onValue(userStatusRef, (snapshot) => {
+    callback(snapshot.val());
+  });
+
+  return () => {
+    unsubscribe(); 
+  };
+}
 
 
 export {auth, db, storage} ;
