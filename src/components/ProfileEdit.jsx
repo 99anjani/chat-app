@@ -31,7 +31,6 @@ const ProfileEdit = ({ isOpen, onClose, user, setUserData }) => {
             setUsername(user.username || "");
             setImage(user.image || defaultProfile);
         }
-        console.log("ProfileEdit user:", user);
     }, [user, isOpen]);
 
     if (!isOpen || !user) return null;

@@ -144,7 +144,7 @@ const Navlinks = ({ setSelectedUser }) => {
   return (
     <>
       {/* Mobile Top Bar */}
-      <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-[#0d0b2b] border-b border-white/10 sticky top-0 z-[110] w-full">
+      <header className="lg:hidden flex items-center justify-between px-5 py-4 bg-[#0d0b2b] border-b border-white/10 sticky top-0 z-[110] w-full">
         <img src={logo} className="w-9 h-9 object-contain" alt="Logo" />
         <button
           onClick={() => setMobileOpen((o) => !o)}
@@ -180,7 +180,7 @@ const Navlinks = ({ setSelectedUser }) => {
         `}
       >
         {/* Logo */}
-        <div className="hidden lg:flex w-full justify-center border-b border-white/10 py-5 mb-2">
+        <div className="hidden lg:flex w-full justify-center border-b border-white/10 px-1 py-4 mb-2">
           <img src={logo} className="w-11 h-11 object-contain" alt="Logo" />
         </div>
 

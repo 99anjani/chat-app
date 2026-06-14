@@ -1,19 +1,38 @@
-export const formatTimestamp = (timestamp, showTime = false) => {
-    const defaultTimestamp = { seconds: 0, nanoseconds: 0 };
-    const { seconds, nanoseconds } = timestamp || defaultTimestamp;
+export const formatTimestamp = (timestamp) => {
+    if (!timestamp) return "";
 
+    const { seconds, nanoseconds } = timestamp;
     const date = new Date(seconds * 1000 + nanoseconds / 1000000);
 
-    const dateOptions = { day: "numeric", month: "short", year: "numeric" };
-    const timeOptions = { hour: "2-digit", minute: "2-digit" };
+    const now = new Date();
 
-    const formattedDate = date.toLocaleDateString("en-US", dateOptions);
-    const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
+    const isToday =
+        date.getDate() === now.getDate() &&
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear();
 
-    const day = date.getDate();
-    const suffix = day >= 11 && day <= 13 ? "th" : day % 10 === 1 ? "st" : day % 10 === 2 ? "nd" : day % 10 === 3 ? "rd" : "th";
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const isYesterday =
+        date.getDate() === yesterday.getDate() &&
+        date.getMonth() === yesterday.getMonth() &&
+        date.getFullYear() === yesterday.getFullYear();
 
-    const finalDate = formattedDate.replace(/(\d+)/, `$1${suffix}`);
+    if (isToday) {
+        return date.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        });
+    }
 
-    return showTime ? `${finalDate} · ${formattedTime}` : finalDate;
+    if (isYesterday) {
+        return "Yesterday";
+    }
+
+    // e.g. 5/31/26
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    const y = String(date.getFullYear()).slice(-2);
+    return `${m}/${d}/${y}`;
 };

@@ -62,8 +62,7 @@ export const sendMessage = async (messageText, chatId, user1,user2) =>{
   const user1Doc = await getDoc(doc(db,"users",user1));
   const user2Doc = await getDoc(doc(db, "users", user2));
 
-  console.log(user1Doc);
-  console.log(user2Doc);
+
 
   const user1Data = user1Doc.data();
   const user2Data = user2Doc.data();

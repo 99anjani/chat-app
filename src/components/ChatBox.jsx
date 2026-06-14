@@ -3,11 +3,14 @@ import defaultProfile from '../../public/assets/user_1.png'
 import { RiSendPlaneFill } from 'react-icons/ri'
 import {messageData} from '../data/messageData'
 import { formatTimestamp } from '../utils/formatTimeStamp'
-import { auth, listenForMessages, markMessageAsRead, sendMessage } from '../firebase/firebase'
+import {
+  auth, listenForMessages, markMessageAsRead, sendMessage, listenForUserStatus } from '../firebase/firebase'
 import logo from '../../public/assets/logo.png'
 import { getDayLable, getTimeOnly } from '../utils/dateFormater'
+import { formatLastSeen } from "../utils/formatLastSeen";
 
 const ChatBox = ({ selectedUser }) => {
+  console.log("ChatBox Render");
   const [messages,setMessages] = useState([]);
   const [messageText , sendMessageText] = useState("");
   // const senderEmail = "john@gmail.com";
@@ -17,10 +20,8 @@ const ChatBox = ({ selectedUser }) => {
   const user1 = auth?.currentUser;
   const user2 = selectedUser;
   const senderEmail = auth?.currentUser?.email;
+  const [userStatus, setUserStatus] = useState(null);
 
-  console.log(typeof(chatId));
-  console.log(user1);
-  console.log(user2);
 
   useEffect(() => {
     if (!selectedUser) return;
@@ -32,6 +33,18 @@ const ChatBox = ({ selectedUser }) => {
   }, [chatId, selectedUser]);
 
 
+  useEffect(() => {
+    if (!selectedUser?.uid) return;
+
+    const unsubscribe = listenForUserStatus(
+      selectedUser.uid,
+      (status) => {
+        setUserStatus(status);
+      }
+    );
+
+    return unsubscribe;
+  }, [selectedUser]);
 
   useEffect(() => {
     if(scrollRef.current){
@@ -39,6 +52,7 @@ const ChatBox = ({ selectedUser }) => {
     }
     
   }, [messages])
+
 
   const sortedMessages = useMemo(()=>{
     return [...messages].sort((a,b) => {
@@ -65,10 +79,10 @@ const ChatBox = ({ selectedUser }) => {
 
   if (!selectedUser) {
     return (
-      <section className="h-screen w-full bg-[#d7ddf2] flex flex-col justify-center items-center">
+      <section className="h-screen w-full bg-[#0a0827] flex flex-col justify-center items-center">
         <img src={logo} alt="Logo" width={100} />
-        <h1 className="text-3xl font-bold text-[#080659] mt-5">Welcome to Chat</h1>
-        <p className="text-gray-500 text-center mt-2">
+        <h1 className="text-3xl text-white font-bold mt-5">Welcome to Chat</h1>
+        <p className="text-white/15 text-center mt-2">
           Connect and chat with friends easily, securely, fast and free
         </p>
       </section>
@@ -78,22 +92,42 @@ const ChatBox = ({ selectedUser }) => {
 
   return ( 
     <>
-        <section className='flex flex-col items-start justify-start h-screen w-[100%] chat-background-image'>
-          <header className='border-b border-gray-500 w-[100%] h-[115px] p-4 bg-white shadow-sm'>
-            <main className='flex items-center gap-3'>
-              <span>
-                <img src={selectedUser?.image || defaultProfile} className='w-11 h-11 rounded-full object-cover' />
-              </span>
-              <span>
-                <h3 className='font-semibold text-[#080659] text-lg'>{selectedUser?.fullName || "John Doe"}</h3>
-                <p className='font-light text-[#4c4c53] text-sm'>@{selectedUser?.username || "john"}</p>
-              </span>
-            </main>
-          </header>
+      <section className="flex flex-col h-screen w-full bg-[#0a0827]">
+        <header className="sticky top-0 z-20 flex items-center gap-3 px-5 py-4 bg-[#0f0d2e] border-b border-white/10">
 
-          <main className='custom-scrollbar relative h-[100vh] w-[100%] flex flex-col justify-between'>
-            <section className='px-3 pt-5 b-20 lg:pb-10'>
-              <div ref={scrollRef} className='overflow-auto h-[80vh]'>
+          <div className="relative">
+            <img
+              src={selectedUser?.image || defaultProfile}
+              className="w-11 h-11 rounded-full object-cover ring-2 ring-white/10"
+              alt=""
+            />
+
+            {userStatus?.online && (
+              <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-400 border-2 border-[#0f0d2e]" />
+            )}
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <h3 className="text-white font-semibold truncate">
+              {selectedUser?.fullName}
+            </h3>
+
+            <p className="text-xs">
+              {userStatus?.online ? (
+                <span className="text-green-400">Online</span>
+              ) : (
+                <span className="text-white/40">
+                    {(formatLastSeen(userStatus?.lastSeen)) === "offline" ? "last seen long time ago" : `last seen ${formatLastSeen(userStatus?.lastSeen)}`}
+                </span>
+              )}
+            </p>
+          </div>
+
+        </header>
+
+          <main className="flex flex-col flex-1 overflow-hidden">
+          <section className="flex-1 px-3 pt-4 overflow-hidden">            
+            <div ref={scrollRef} className="h-full overflow-y-auto custom-scrollbar pb-5">
                 {sortedMessages?.map((msg, index) => {
                   const currentDay = getDayLable(msg.timestamp);
                   const prevDay = index > 0 ? getDayLable(sortedMessages[index - 1].timestamp) : null;
@@ -105,8 +139,8 @@ const ChatBox = ({ selectedUser }) => {
                     <div key={msg.id || index} className="mb-2">
                       {/* Date Header */}
                       {showDateHeader && (
-                        <div className="text-center my-4">
-                          <span className="bg-gray-300 text-gray-700 text-xs px-3 py-1 rounded-full">
+                        <div className="flex justify-center my-5">
+                          <span className="px-3 py-1 rounded-full bg-white/10 text-white/50 text-xs">
                             {currentDay}
                           </span>
                         </div>
@@ -125,11 +159,13 @@ const ChatBox = ({ selectedUser }) => {
                         )}
 
                         <div
-                          className={`p-2 rounded-xl max-w-[70%] break-words ${isSender ? 'bg-[#C3CFF9]' : 'bg-white'
+                          className={`px-4 py-2 rounded-2xl shadow-sm max-w-[80%] lg:max-w-[60%] break-words ${isSender
+                              ? 'bg-violet-500 text-white rounded-br-md'
+                              : 'bg-[#1a1740] text-white rounded-bl-md'
                             }`}
                         >
-                          <p className="text-gray-800 font-medium text-[17px]">{msg.text}</p>
-                          <p className="text-gray-500 font-medium text-[10px] text-right mt-1">
+                          <p className="text-sm">{msg.text}</p>
+                          <p className="text-white/40 text-[10px] text-right mt-1">
                             {getTimeOnly(msg.timestamp)}
                           </p>
                         </div>
@@ -143,12 +179,24 @@ const ChatBox = ({ selectedUser }) => {
 
               </div>
             </section>
-            <div className='sticky lg:bottom-0 bottom-[60px] p-3 h-fit w-[100%]'>
-              <form onSubmit={handleSendMessage} action="" className='flex items-center h-[45px] w-[100%] bg-white px-3 rounded-lg relative shadow-2xl'>
-                <input value={messageText} onChange={(e) => sendMessageText(e.target.value)} type='text' className='h-full font-light text-[#080659] outline-none text-[16px] pl-3 pr-[50px] rounded-lg w-[100%]' placeholder='Write your message...' />
-                <button type='submit' className='flex items-center justify-center absolute right-3 p-2 rounded-full bg-[#C3CFF9] hover:bg-[#4f4dbf]'>
-                  <RiSendPlaneFill color='#080659' />
-                </button>
+            <div className="sticky bottom-0 p-3 bg-[#0f0d2e] border-t border-white/10">
+              <form
+                onSubmit={handleSendMessage}
+                className="flex items-center gap-2"
+              >
+              <input
+                value={messageText}
+                onChange={(e) => sendMessageText(e.target.value)}
+                type="text"
+                placeholder="Type a message..."
+                className="flex-1 bg-[#1a1740] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 outline-none focus:border-violet-500/50
+                " />
+              <button
+                type="submit"
+                disabled={!messageText.trim()}
+                className="h-12 w-12 rounded-xl bg-violet-500 hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all shadow-lg">
+                <RiSendPlaneFill size={25} className="text-white ml-[2px]" />
+              </button>
               </form>
             </div>
           </main>

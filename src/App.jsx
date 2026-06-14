@@ -35,7 +35,7 @@ const AppContent = () => {
       {user ? (
         <div className='flex lg:flex-row flex-col items-start w-[100%]'>
           <Navlinks setSelectedUser={setSelectedUser} />
-          <ChatList setSelectedUser={setSelectedUser} />
+          <ChatList setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
           <ChatBox selectedUser={selectedUser} />
         </div>
       ) : (

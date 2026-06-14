@@ -85,3 +85,13 @@ input:-webkit-autofill:active {
 .animate-modal {
     animation: modalFadeIn 0.2s ease-out;
 }
+
+/* hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
